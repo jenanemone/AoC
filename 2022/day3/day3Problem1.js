@@ -42,41 +42,36 @@ const fileName = 'rucksacks.txt';
 const filePath = path.join(__dirname, fileName)
 
 async function readTxtFile(filePath) {
-    // return the contents of the calories text file by reading it
+    // return the contents of the rucksacks text file by reading it, return the array 
     try {    
         const contents = await fileSys.readFile(filePath, { encoding: 'utf8' });
-        console.log(contents);
-        return contents
+        return contents.split("\n")
         
     } catch (err) {
         console.error(err.message);
     }
 }
 
-function findPriorityValue(data) {
-    let arr = data.split("\n")
-    //console.log(arr)
-    //let splitSacks = {}
-
-    // use charCode to evaluate
-    // 65 A 90 Z 97 a 122 z
-
+function findPriorityValue(arr) {
+    // sum up the character that matches the left and right evenly split sack
 
     let total = 0
     for (let i = 0; i < arr.length; i++) {
-        let fullSack = arr[i] // vJrwpWtwJgWrhcsFMMfFFhFp
-        let leftSack = {} //{v: 1, J: 1, r:1, w:2, p:1, W:1, t:1}
-        let same = ""
-        let left = fullSack.slice(0,fullSack.length / 2)
+        let fullSack = arr[i] 
+        let leftSack = {}
+        let left = fullSack.slice(0,fullSack.length / 2) 
         // make a hashmap for left
         left.split("").forEach(x => leftSack[x] ? leftSack[x]++ : leftSack[x] = 1)
-        same = fullSack.slice(fullSack.length / 2, ).split("").find(char => char in leftSack)
-        total += calcCode(same)
+        total += calcCode(fullSack.slice(fullSack.length / 2, ).split("").find(char => char in leftSack))
+        
     }
     return total
 }
 
 function calcCode(char) {
+    // use charCode to evaluate the priority value
+    // 65 A 90 Z 97 a 122 z
+
     let priority = 0
     if (char.toUpperCase() !== char) {
         priority = char.charCodeAt() - 96
@@ -87,7 +82,7 @@ function calcCode(char) {
     return priority
 }
 
+// do the deed
 readTxtFile(filePath).then((data) => {
     console.log(findPriorityValue(data))
-    return findPriorityValue(data)
 })
