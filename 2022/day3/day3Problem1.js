@@ -57,11 +57,9 @@ function findPriorityValue(arr) {
 
     let total = 0
     for (let i = 0; i < arr.length; i++) {
-        let fullSack = arr[i] 
-        let leftSack = {}
-        let left = fullSack.slice(0,fullSack.length / 2) 
-        // make a hashmap for left
-        left.split("").forEach(x => leftSack[x] ? leftSack[x]++ : leftSack[x] = 1)
+        const fullSack = arr[i] 
+        const left = Array.from(new Set(fullSack.slice(0,fullSack.length / 2).split("")))
+        const leftSack = Object.fromEntries(left.map(elem => [elem,""]))
         total += calcCode(fullSack.slice(fullSack.length / 2, ).split("").find(char => char in leftSack))
         
     }
@@ -71,15 +69,7 @@ function findPriorityValue(arr) {
 function calcCode(char) {
     // use charCode to evaluate the priority value
     // 65 A 90 Z 97 a 122 z
-
-    let priority = 0
-    if (char.toUpperCase() !== char) {
-        priority = char.charCodeAt() - 96
-    }
-    else {
-        priority = char.charCodeAt() - 38
-    }
-    return priority
+    return char.toUpperCase() !== char ? char.charCodeAt() - 96 : char.charCodeAt() - 38
 }
 
 // do the deed
